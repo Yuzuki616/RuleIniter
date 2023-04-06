@@ -1,0 +1,125 @@
+{
+  "RoutePath": "./route.json",
+  "OutTag": "unlock",
+  "CheckGlobal": true,
+  "CheckRegion": false,
+  "MediaList": {
+    "global": [
+      "Hotstar",
+      "Disney+",
+      "Netflix",
+      "Netflix CDN",
+      "Youtube",
+      "Youtube CDN",
+      "Amazon Prime Video",
+      "TVBAnywhere+",
+      "iQyi",
+      "Viu.com",
+      "Spotify",
+      "Steam",
+      "ChatGPT"
+    ],
+    "hk": [
+      "Now E",
+      "Viu.TV",
+      "MyTVSuper",
+      "HBO GO Aisa",
+      "BiliBili Hongkong/Macau Only"
+    ],
+    "jp": [
+      "DMM",
+      "Abema",
+      "Niconico",
+      "music.jp",
+      "Telasa",
+      "Paravi",
+      "U-NEXT",
+      "Hulu Japan",
+      "GYAO!",
+      "VideoMarket",
+      "FOD(Fuji TV)",
+      "Radiko",
+      "Karaoke@DAM",
+      "J:COM On Demand",
+      "Kancolle",
+      "Pretty Derby Japan",
+      "Konosuba Fantastic Days",
+      "Princess Connect Re:Dive Japan",
+      "World Flipper Japan",
+      "Project Sekai: Colorful Stage"
+    ],
+    "tw": [
+      "KKTV",
+      "LiTV",
+      "MyVideo",
+      "4GTV",
+      "LineTV",
+      "Hami Video",
+      "CatchPlay+",
+      "Bahamut Anime",
+      "Bilibili Taiwan Only"
+    ],
+    "us": [
+      "FOX",
+      "Hulu",
+      "ESPN+",
+      "Epix",
+      "Starz",
+      "Philo",
+      "FXNOW",
+      "TLC GO",
+      "HBO Max",
+      "Shudder",
+      "BritBox",
+      "CW TV",
+      "NBA TV",
+      "Tubi TV",
+      "Sling TV",
+      "Pluto TV",
+      "Acorn TV",
+      "SHOWTIME",
+      "encoreTVB",
+      "Funimation",
+      "Discovery+",
+      "Paramount+",
+      "Peacock TV",
+      "Popcornflix",
+      "Crunchyroll",
+      "Direct Stream",
+      "CBC Gem"
+    ]
+  },
+  "MatchRuleList": {
+    "Abema": [
+      "geosite:abema"
+    ],
+    "DMM": [
+      "geosite:dmm"
+    ],
+    "Hulu Japan": [
+      "geosite:hulu"
+    ],
+    "Netflix": [
+      "geosite:netflix"
+    ],
+    "Niconico": [
+      "geosite:niconico"
+    ],
+    "Paravi": [
+      "domain:paravi.jp"
+    ],
+    "Telasa": [
+      "domain:telasa.jp",
+      "domain:kddi-video.com",
+      "domain:videopass.jp",
+      "domain:d2lmsumy47c8as.cloudfront.net"
+    ],
+    "U-NEXT": [
+      "domain:unext.jp",
+      "domain:nxtv.jp"
+    ],
+    "music.jp": [
+      "domain:music-book.jp"
+    ]
+  }
+}
