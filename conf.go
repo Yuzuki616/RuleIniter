@@ -169,12 +169,12 @@ func LoadConfig(path string) error {
 		},
 	}
 	// load config file
-	f, err := os.OpenFile(path, os.O_RDWR, 0744)
+	f, err := os.Open(path)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
-	err = json.NewEncoder(f).Encode(&config)
+	err = json.NewDecoder(f).Decode(&config)
 	if err != nil {
 		return err
 	}

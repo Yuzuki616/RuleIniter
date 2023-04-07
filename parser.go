@@ -13,20 +13,20 @@ type Routing struct {
 	Balancers      json.RawMessage `json:"balancers,omitempty"`
 }
 type Rule struct {
-	DomainMatcher string   `json:"domainMatcher,omitempty"`
-	Type          string   `json:"type,omitempty"`
-	Domain        []string `json:"domain,omitempty"`
-	Ip            []string `json:"ip,omitempty"`
-	Port          string   `json:"port,omitempty"`
-	SourcePort    string   `json:"sourcePort,omitempty"`
-	Network       string   `json:"network,omitempty"`
-	Source        []string `json:"source,omitempty"`
-	User          []string `json:"user,omitempty"`
-	InboundTag    []string `json:"inboundTag,omitempty"`
-	Protocol      []string `json:"protocol,omitempty"`
-	Attrs         string   `json:"attrs,omitempty"`
-	OutboundTag   string   `json:"outboundTag,omitempty"`
-	BalancerTag   string   `json:"balancerTag,omitempty"`
+	DomainMatcher string          `json:"domainMatcher,omitempty"`
+	Type          string          `json:"type,omitempty"`
+	Domain        []string        `json:"domain,omitempty"`
+	Ip            []string        `json:"ip,omitempty"`
+	Port          string          `json:"port,omitempty"`
+	SourcePort    string          `json:"sourcePort,omitempty"`
+	Network       string          `json:"network,omitempty"`
+	Source        json.RawMessage `json:"source,omitempty"`
+	User          json.RawMessage `json:"user,omitempty"`
+	InboundTag    json.RawMessage `json:"inboundTag,omitempty"`
+	Protocol      json.RawMessage `json:"protocol,omitempty"`
+	Attrs         string          `json:"attrs,omitempty"`
+	OutboundTag   string          `json:"outboundTag,omitempty"`
+	BalancerTag   string          `json:"balancerTag,omitempty"`
 }
 
 func RuleChanged(old, new []string) bool {
@@ -107,7 +107,9 @@ func ParseRouteConf(medias []string) error {
 		return fmt.Errorf("truncate file error: %s", err)
 	}
 	f.Seek(0, 0)
-	err = json.NewEncoder(f).Encode(route)
+	e := json.NewEncoder(f)
+	e.SetIndent("", "    ")
+	err = e.Encode(&route)
 	if err != nil {
 		return fmt.Errorf("encode route file error: %s", err)
 	}
