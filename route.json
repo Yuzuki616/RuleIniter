@@ -1,0 +1,43 @@
+{
+  "domainStrategy": "IPOnDemand",
+  "rules": [
+    {
+      "type": "field",
+      "ip": [
+        "geoip:private"
+      ],
+      "outboundTag": "block"
+    },
+    {
+      "type": "field",
+      "protocol": [
+        "bittorrent"
+      ],
+      "outboundTag": "block"
+    },
+    {
+      "type": "field",
+      "network": "udp,tcp",
+      "outboundTag": "IPv4_out"
+    },
+    {
+      "type": "field",
+      "domain": [
+        "geosite:abema",
+        "domain:paravi.jp",
+        "domain:music-book.jp",
+        "geosite:niconico",
+        "domain:unext.jp",
+        "domain:nxtv.jp",
+        "geosite:hulu",
+        "geosite:netflix",
+        "geosite:dmm"
+      ],
+      "ip": [
+        "geoip:netflix"
+      ],
+      "outboundTag": "unlock"
+    }
+  ],
+  "balancers": null
+}

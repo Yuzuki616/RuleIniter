@@ -7,13 +7,18 @@ import (
 
 var config Conf
 
+type MatchRule struct {
+	Domain []string
+	Ip     []string
+}
+
 type Conf struct {
-	RoutePath     string              `json:"RoutePath"`
-	OutTag        string              `json:"OutTag"`
-	CheckGlobal   bool                `json:"CheckGlobal"`
-	CheckRegion   bool                `json:"CheckRegion"`
-	MediaList     map[string][]string `json:"MediaList"`
-	MatchRuleList map[string][]string `json:"MatchRuleList"`
+	RoutePath     string               `json:"RoutePath"`
+	OutTag        string               `json:"OutTag"`
+	CheckGlobal   bool                 `json:"CheckGlobal"`
+	CheckRegion   bool                 `json:"CheckRegion"`
+	MediaList     map[string][]string  `json:"MediaList"`
+	MatchRuleList map[string]MatchRule `json:"MatchRuleList"`
 }
 
 func LoadConfig(path string) error {
@@ -109,48 +114,67 @@ func LoadConfig(path string) error {
 				"Bilibili Taiwan Only",
 			},
 		},
-		MatchRuleList: map[string][]string{
+		MatchRuleList: map[string]MatchRule{
 			"Netflix": {
-				"geosite:netflix",
+				Domain: []string{
+					"geosite:netflix",
+				},
+				Ip: []string{
+					"geoip:netflix",
+				},
 			},
 			"Niconico": {
-				"geosite:niconico",
+				Domain: []string{
+					"geosite:niconico",
+				},
 			},
 			"DMM": {
-				"geosite:dmm",
+				Domain: []string{
+					"geosite:dmm",
+				},
 			},
 			"Abema": {
-				"geosite:abema",
+				Domain: []string{
+					"geosite:abema",
+				},
 			},
 			"music.jp": {
-				"domain:music-book.jp",
+				Domain: []string{
+					"domain:music-book.jp",
+				},
 			},
 			"Telasa": {
-				"domain:telasa.jp",
-				"domain:kddi-video.com",
-				"domain:videopass.jp",
-				"domain:d2lmsumy47c8as.cloudfront.net",
+				Domain: []string{
+					"domain:telasa.jp",
+					"domain:kddi-video.com",
+					"domain:videopass.jp",
+					"domain:d2lmsumy47c8as.cloudfront.net",
+				},
 			},
 			"Paravi": {
-				"domain:paravi.jp",
+				Domain: []string{
+					"domain:paravi.jp",
+				},
 			},
 			"U-NEXT": {
-				"domain:unext.jp",
-				"domain:nxtv.jp",
-			},
+				Domain: []string{
+					"domain:unext.jp",
+					"domain:nxtv.jp",
+				}},
 			"Hulu Japan": {
-				"geosite:hulu",
+				Domain: []string{
+					"geosite:hulu",
+				},
 			},
 		},
 	}
-
 	// load config file
-	f, err := os.Open(path)
+	f, err := os.OpenFile(path, os.O_RDWR, 0744)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
-	err = json.NewDecoder(f).Decode(&config)
+	err = json.NewEncoder(f).Encode(&config)
 	if err != nil {
 		return err
 	}

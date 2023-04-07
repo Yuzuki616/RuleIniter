@@ -3,14 +3,30 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/xtls/xray-core/infra/conf"
 	"os"
 )
 
+type Routing struct {
+	DomainStrategy string          `json:"domainStrategy,omitempty"`
+	DomainMatcher  string          `json:"domainMatcher,omitempty"`
+	Rules          []Rule          `json:"rules,omitempty"`
+	Balancers      json.RawMessage `json:"balancers,omitempty"`
+}
 type Rule struct {
-	Type        string   `json:"type"`
-	OutboundTag string   `json:"outboundTag"`
-	Domain      []string `json:"domain"`
+	DomainMatcher string   `json:"domainMatcher,omitempty"`
+	Type          string   `json:"type,omitempty"`
+	Domain        []string `json:"domain,omitempty"`
+	Ip            []string `json:"ip,omitempty"`
+	Port          string   `json:"port,omitempty"`
+	SourcePort    string   `json:"sourcePort,omitempty"`
+	Network       string   `json:"network,omitempty"`
+	Source        []string `json:"source,omitempty"`
+	User          []string `json:"user,omitempty"`
+	InboundTag    []string `json:"inboundTag,omitempty"`
+	Protocol      []string `json:"protocol,omitempty"`
+	Attrs         string   `json:"attrs,omitempty"`
+	OutboundTag   string   `json:"outboundTag,omitempty"`
+	BalancerTag   string   `json:"balancerTag,omitempty"`
 }
 
 func RuleChanged(old, new []string) bool {
@@ -40,7 +56,7 @@ func RuleChanged(old, new []string) bool {
 }
 
 func ParseRouteConf(medias []string) error {
-	route := &conf.RouterConfig{}
+	route := &Routing{}
 	f, err := os.OpenFile(config.RoutePath, os.O_RDWR, 0744)
 	if err != nil {
 		return fmt.Errorf("open route file error: %s", err)
@@ -50,25 +66,31 @@ func ParseRouteConf(medias []string) error {
 		return fmt.Errorf("decode route file error: %s", err)
 	}
 	var domains []string
+	var ips []string
 	for _, m := range medias {
-		domains = append(domains, config.MatchRuleList[m]...)
+		domains = append(domains, config.MatchRuleList[m].Domain...)
+		ips = append(ips, config.MatchRuleList[m].Ip...)
 	}
 	save := false
-	for i := range route.RuleList {
-		rule := Rule{}
-		err := json.Unmarshal(route.RuleList[i], &rule)
-		if err != nil {
-			return fmt.Errorf("parse rule error: %s", err)
+	for i := range route.Rules {
+		if route.Rules[i].OutboundTag != config.OutTag {
+			continue
 		}
-		if rule.OutboundTag == config.OutTag {
-			if !RuleChanged(rule.Domain, domains) {
-				return nil
-			}
-			rule.Domain = make([]string, 0)
-			rule.Domain = domains
-			r, _ := json.Marshal(rule)
-			route.RuleList[i] = r
+		changed := true
+		if RuleChanged(route.Rules[i].Domain, domains) {
+			route.Rules[i].Domain = domains
 			save = true
+		} else {
+			changed = false
+		}
+		if RuleChanged(route.Rules[i].Ip, ips) {
+			route.Rules[i].Ip = ips
+			save = true
+		} else if !changed {
+			return nil
+		}
+		if changed {
+			break
 		}
 	}
 	if !save {
@@ -76,9 +98,9 @@ func ParseRouteConf(medias []string) error {
 			Type:        "field",
 			OutboundTag: config.OutTag,
 			Domain:      domains,
+			Ip:          ips,
 		}
-		r, _ := json.Marshal(rule)
-		route.RuleList = append(route.RuleList, r)
+		route.Rules = append(route.Rules, rule)
 	}
 	err = f.Truncate(0)
 	if err != nil {

@@ -1,5 +1,5 @@
 {
-  "RoutePath": "./route.json",
+  "RoutePath": "/etc/V2bX/route.json",
   "OutTag": "unlock",
   "CheckGlobal": true,
   "CheckRegion": false,
@@ -90,36 +90,57 @@
     ]
   },
   "MatchRuleList": {
-    "Abema": [
-      "geosite:abema"
-    ],
-    "DMM": [
-      "geosite:dmm"
-    ],
-    "Hulu Japan": [
-      "geosite:hulu"
-    ],
-    "Netflix": [
-      "geosite:netflix"
-    ],
-    "Niconico": [
-      "geosite:niconico"
-    ],
-    "Paravi": [
-      "domain:paravi.jp"
-    ],
-    "Telasa": [
-      "domain:telasa.jp",
-      "domain:kddi-video.com",
-      "domain:videopass.jp",
-      "domain:d2lmsumy47c8as.cloudfront.net"
-    ],
-    "U-NEXT": [
-      "domain:unext.jp",
-      "domain:nxtv.jp"
-    ],
-    "music.jp": [
-      "domain:music-book.jp"
-    ]
+    "Abema": {
+      "Domain": [
+        "geosite:abema"
+      ]
+    },
+    "DMM": {
+      "Domain": [
+        "geosite:dmm"
+      ]
+    },
+    "Hulu Japan": {
+      "Domain": [
+        "geosite:hulu"
+      ]
+    },
+    "Netflix": {
+      "Domain": [
+        "geosite:netflix"
+      ],
+      "Ip": [
+        "geoip:netflix"
+      ]
+    },
+    "Niconico": {
+      "Domain": [
+        "geosite:niconico"
+      ]
+    },
+    "Paravi": {
+      "Domain": [
+        "domain:paravi.jp"
+      ]
+    },
+    "Telasa": {
+      "Domain": [
+        "domain:telasa.jp",
+        "domain:kddi-video.com",
+        "domain:videopass.jp",
+        "domain:d2lmsumy47c8as.cloudfront.net"
+      ]
+    },
+    "U-NEXT": {
+      "Domain": [
+        "domain:unext.jp",
+        "domain:nxtv.jp"
+      ]
+    },
+    "music.jp": {
+      "Domain": [
+        "domain:music-book.jp"
+      ]
+    }
   }
 }
