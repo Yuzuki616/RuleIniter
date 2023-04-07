@@ -97,12 +97,13 @@ type Result struct {
 
 func CheckMediaUnlock(region string) ([]string, error) {
 	var medias []string
-	// add region
 	if region == "all" {
+		// add all
 		for _, n := range config.MediaList {
 			medias = append(medias, n...)
 		}
 	} else {
+		// add region
 		if ms, e := config.MediaList[region]; e {
 			medias = ms
 		} else {
@@ -110,10 +111,10 @@ func CheckMediaUnlock(region string) ([]string, error) {
 				return nil, errors.New("not have the region")
 			}
 		}
-	}
-	// add global
-	if region != "global" && config.CheckGlobal {
-		medias = append(medias, config.MediaList["global"]...)
+		// add global
+		if region != "global" && config.CheckGlobal {
+			medias = append(medias, config.MediaList["global"]...)
+		}
 	}
 	rs := make(chan *Result)
 	done := make(chan struct{})

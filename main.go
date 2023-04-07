@@ -10,7 +10,8 @@ var region = flag.String("region", "all", "region")
 var version = "default"
 
 func main() {
-	log.Println("RuleIniter Ver ", version)
+	flag.Parse()
+	log.Println("RuleIniter Ver", version)
 	err := LoadConfig(*path)
 	if err != nil {
 		log.Printf("load config error: %s", err)
@@ -19,6 +20,10 @@ func main() {
 	m, err := CheckMediaUnlock(*region)
 	if err != nil {
 		log.Printf("some check error: %s", err)
+	}
+	log.Println("Can not unlock list:")
+	for i := range m {
+		log.Println(m[i])
 	}
 	err = ParseRouteConf(m)
 	if err != nil {
