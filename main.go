@@ -7,8 +7,10 @@ import (
 
 var path = flag.String("conf", "./config.json", "config file")
 var region = flag.String("region", "all", "region")
+var version = "default"
 
 func main() {
+	log.Println("RuleIniter Ver ", version)
 	err := LoadConfig(*path)
 	if err != nil {
 		log.Printf("load config error: %s", err)
