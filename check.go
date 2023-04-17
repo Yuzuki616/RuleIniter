@@ -165,7 +165,9 @@ func CheckMediaUnlock(region string) ([]string, error) {
 			if n != nil {
 				if n.Err != nil {
 					errs = multierror.Append(errs, fmt.Errorf("%s error: %s", n.Name, n.Err))
+					continue
 				}
+				fails = append(fails, n.Name)
 			}
 		}
 	}
