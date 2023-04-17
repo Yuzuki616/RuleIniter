@@ -10,5 +10,5 @@ func init() {
 }
 
 func TestCheckMediaUnlock(t *testing.T) {
-	log.Print(CheckMediaUnlock("jp"))
+	log.Print(CheckMediaUnlock("global"))
 }

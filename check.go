@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	m "github.com/Yuzuki616/MediaUnlockTest"
 	"github.com/hashicorp/go-multierror"
 	"net/http"
@@ -102,29 +103,37 @@ func CheckMediaUnlock(region string) ([]string, error) {
 		for _, n := range config.MediaList {
 			medias = append(medias, n...)
 		}
+		config.CheckRegion = false
 	} else {
 		// add region
 		if ms, e := config.MediaList[region]; e {
 			medias = ms
-		} else {
-			if !config.CheckRegion {
-				return nil, errors.New("not have the region")
-			}
+		} else if !config.CheckRegion {
+			return nil, errors.New("not have the region")
 		}
 		// add global
-		if region != "global" && config.CheckGlobal {
-			medias = append(medias, config.MediaList["global"]...)
+		if region == "global" {
+			config.CheckRegion = false
+		} else {
+			if config.CheckGlobal {
+				medias = append(medias, config.MediaList["global"]...)
+			}
 		}
 	}
 	rs := make(chan *Result)
 	done := make(chan struct{})
 	var fails []string
 	var errs error
+	temp := make(map[string]struct{}, len(medias))
 	go func() {
 		wg := sync.WaitGroup{}
-		wg.Add(len(medias))
 		for _, n := range medias {
+			if _, e := temp[n]; e {
+				continue
+			}
+			temp[n] = struct{}{}
 			n := n
+			wg.Add(1)
 			go func() {
 				defer wg.Done()
 				r := MediaList[n](c)
@@ -155,9 +164,8 @@ func CheckMediaUnlock(region string) ([]string, error) {
 		case n := <-rs:
 			if n != nil {
 				if n.Err != nil {
-					errs = multierror.Append(errs, n.Err)
+					errs = multierror.Append(errs, fmt.Errorf("%s error: %s", n.Name, n.Err))
 				}
-				fails = append(fails, n.Name)
 			}
 		}
 	}
