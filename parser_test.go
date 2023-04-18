@@ -7,6 +7,6 @@ func init() {
 }
 
 func TestParseRouteConf(t *testing.T) {
-	m, _ := CheckMediaUnlock("jp")
+	m, _ := CheckMediaUnlock("global")
 	ParseRouteConf(m)
 }

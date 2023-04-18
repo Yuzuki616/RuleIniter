@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 )
 
@@ -71,6 +72,7 @@ func ParseRouteConf(medias []string) error {
 		domains = append(domains, config.MatchRuleList[m].Domain...)
 		ips = append(ips, config.MatchRuleList[m].Ip...)
 	}
+	log.Println(medias, config.MatchRuleList["ChatGPT"])
 	save := false
 	for i := range route.Rules {
 		if route.Rules[i].OutboundTag != config.OutTag {
@@ -100,7 +102,7 @@ func ParseRouteConf(medias []string) error {
 			Domain:      domains,
 			Ip:          ips,
 		}
-		route.Rules = append(route.Rules, rule)
+		route.Rules = append([]Rule{rule}, route.Rules...)
 	}
 	err = f.Truncate(0)
 	if err != nil {
