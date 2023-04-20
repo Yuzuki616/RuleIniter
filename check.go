@@ -137,12 +137,14 @@ func CheckMediaUnlock(region string) ([]string, error) {
 			go func() {
 				defer wg.Done()
 				r := MediaList[n](c)
-				if r.Region != region && r.Region != "" {
-					rs <- &Result{
-						Name: n,
-						Err:  r.Err,
+				if config.CheckRegion {
+					if r.Region != region && r.Region != "" {
+						rs <- &Result{
+							Name: n,
+							Err:  r.Err,
+						}
+						return
 					}
-					return
 				}
 				if !r.Success {
 					rs <- &Result{
